@@ -35,7 +35,7 @@ import java.security.MessageDigest
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
-    var auth : FirebaseAuth? = null //?를 해야 null을 담을수 있음.
+    var auth : FirebaseAuth? = null //?를 해야 null을 담을수 있음..
     var googleSignInClient : GoogleSignInClient? = null
     var GOOGLE_LOGIN_CODE = 9001
     //var callbackManager : CallbackManager? = null //facebook 로그인 결과값을 가지고오는 callback
