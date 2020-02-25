@@ -6,13 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <TextView
         android:layout_above="@+id/signin_layout"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo_title">
-    </ImageView>
+        android:gravity="center"
+        android:fontFamily="@font/is_font"
+        android:textSize="72dp"
+        android:text="MLinstagram">
+    </TextView>
 
     <LinearLayout
         android:id="@+id/signin_layout"

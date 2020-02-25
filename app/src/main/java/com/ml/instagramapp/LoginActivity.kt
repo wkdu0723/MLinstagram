@@ -7,11 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -35,10 +42,10 @@ import java.security.MessageDigest
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
-    var auth : FirebaseAuth? = null //?를 해야 null을 담을수 있음..
+    var auth : FirebaseAuth? = null //?를 해야 null을 담을수 있음...
     var googleSignInClient : GoogleSignInClient? = null
     var GOOGLE_LOGIN_CODE = 9001
-    //var callbackManager : CallbackManager? = null //facebook 로그인 결과값을 가지고오는 callback
+    var callbackManager : CallbackManager? = null //facebook 로그인 결과값을 가지고오는 callback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,15 +58,15 @@ class LoginActivity : AppCompatActivity() {
             googleLogin()
         }
         facebook_login_button.setOnClickListener(){
-            //facebookLogin()
+            facebookLogin()
         }
 
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this,gso)
-        //callbackManager = CallbackManager.Factory.create()
-        generateSSHKey()
+        callbackManager = CallbackManager.Factory.create()
+        //generateSSHKey()
     }
     fun googleLogin(){
         var signInIntent = googleSignInClient?.signInIntent
@@ -68,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        //callbackManager?.onActivityResult(requestCode,resultCode,data)
+        callbackManager?.onActivityResult(requestCode,resultCode,data)
         if(requestCode == GOOGLE_LOGIN_CODE){
             var result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if(result.isSuccess){
@@ -129,12 +136,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    /*
+
 
     fun facebookLogin(){
         //추가 권한 요청
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile","email"))
-        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult>{ //facebook 로그인에 성공했을때 넘어오는 부분
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> { //facebook 로그인에 성공했을때 넘어오는 부분
             override fun onSuccess(result: LoginResult?) {
                 handleFacebookAccessToken(result?.accessToken)
             }
@@ -174,7 +181,6 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-*/
 
     fun generateSSHKey(){ //facebook hash 값 가지고오는 function
         try {

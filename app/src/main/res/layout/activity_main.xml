@@ -14,10 +14,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <!--<ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/logo_title" />
+                android:src="@drawable/logo_title" />-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:fontFamily="@font/is_font"
+                android:textSize="21dp"
+                android:text="MLinstagram"/>
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
