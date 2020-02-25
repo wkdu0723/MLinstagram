@@ -182,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    fun generateSSHKey(){ //facebook hash 값 가지고오는 function
+    /*fun generateSSHKey(){ //facebook hash 값 가지고오는 function
         try {
             val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
             for (signature in info.signatures) {
@@ -194,5 +194,5 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("AppLog", "error:", e)
         }
-    }
+    }*/
 }
