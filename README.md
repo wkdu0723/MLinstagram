@@ -1,3 +1,3 @@
 # MLinstagram
 
-kotlin clone
+kotlin으로 코딩
