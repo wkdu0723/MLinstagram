@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         bottom_navigation.setOnNavigationItemSelectedListener(this)
-
+        //기본 화면 설정
+        bottom_navigation.selectedItemId = R.id.action_home
     }
 }
