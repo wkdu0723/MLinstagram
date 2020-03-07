@@ -68,6 +68,12 @@ class LoginActivity : AppCompatActivity() {
         callbackManager = CallbackManager.Factory.create()
         //generateSSHKey()
     }
+
+    override fun onStart() {
+        super.onStart()
+        moveMainPage(auth?.currentUser)
+    }
+
     fun googleLogin(){
         var signInIntent = googleSignInClient?.signInIntent
         startActivityForResult(signInIntent,GOOGLE_LOGIN_CODE)
@@ -133,6 +139,7 @@ class LoginActivity : AppCompatActivity() {
     fun moveMainPage(user: FirebaseUser?){
         if(user != null){ //유저상태가 있으면 메인액티비티 호출
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 
