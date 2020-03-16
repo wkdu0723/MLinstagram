@@ -1,5 +1,6 @@
 package com.ml.instagramapp.navigation
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -109,6 +110,12 @@ class DetailViewFragment : Fragment() {
                 bundle.putString("userId",contentDTOs[position].userId) //선택된 userId값을 받아옴 (UserFragment로 보내기 위함)
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
+            }
+            viewholder.detailviewitem_imageview_content_imageview.setOnClickListener{v ->
+                var intent = Intent(v.context,CommentActivity::class.java)
+                intent.putExtra("contentUid",contentUidList[position])
+                startActivity(intent)
+
             }
         }
 
