@@ -23,8 +23,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.ml.instagramapp.LoginActivity
 import com.ml.instagramapp.MainActivity
 import com.ml.instagramapp.R
+import com.ml.instagramapp.navigation.model.AlarmDTO
 import com.ml.instagramapp.navigation.model.ContentDTO
 import com.ml.instagramapp.navigation.model.FollowDTO
+import com.ml.instagramapp.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
@@ -86,6 +88,18 @@ class UserFragment : Fragment() {
         getFollowerAndFollowing()
         return fragmentView;
     }
+    fun followerAlarm(destinationUid : String){
+        var alarmDTO = AlarmDTO()
+        alarmDTO.destinationUid = destinationUid
+        alarmDTO.userId = auth?.currentUser?.uid
+        alarmDTO.uid = auth?.currentUser?.uid
+        alarmDTO.kind = 2
+        alarmDTO.timestamp = System.currentTimeMillis()
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+        var message = auth?.currentUser?.email + getString(R.string.alarm_follow)
+        FcmPush.instance.sendMessage(destinationUid, "MLinstagram",message)
+    }
 
     fun getProfileImage(){
         firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener{
@@ -111,7 +125,7 @@ class UserFragment : Fragment() {
                     fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
                     fragmentView?.account_btn_follow_signout?.background?.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorLightGray),PorterDuff.Mode.MULTIPLY)
                 }else{
-                    fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
+                    fragmentView?.account_btn_follow_signout?.text = "Logout"
                     if(uid != currentUserUid){
                         fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
                         fragmentView?.account_btn_follow_signout?.background?.colorFilter = null
@@ -153,7 +167,7 @@ class UserFragment : Fragment() {
                 followDTO = FollowDTO()
                 followDTO!!.followerCount = 1
                 followDTO!!.followers[currentUserUid!!] = true
-
+                followerAlarm(uid!!)
                 transaction.set(tsDocFollower, followDTO!!)
                 return@runTransaction
             }
@@ -166,6 +180,7 @@ class UserFragment : Fragment() {
                 //팔로우를 하지 않았을 경우
                 followDTO!!.followerCount = followDTO!!.followerCount + 1
                 followDTO!!.followers[currentUserUid!!] = true //나의 uid를 추가
+                followerAlarm(uid!!)
             }
             transaction.set(tsDocFollower, followDTO!!)
             return@runTransaction
