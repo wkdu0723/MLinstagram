@@ -56,6 +56,7 @@ class AddPhotoActivity : AppCompatActivity() {
             }
         }
     }
+
     fun contentUpload(){
         //Make filename
 

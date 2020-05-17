@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.FirebaseApiNotAvailableException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,6 +22,7 @@ import com.ml.instagramapp.navigation.model.AlarmDTO
 import com.ml.instagramapp.navigation.model.ContentDTO
 import com.ml.instagramapp.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.fragment_detail.view.*
+import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
 class DetailViewFragment : Fragment() {
@@ -37,7 +39,7 @@ class DetailViewFragment : Fragment() {
 
         view.detailviewfragment_recyclerview.adapter = DetailViewRecyclerViewAdapter()
         view.detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
-        return view;
+        return view
     }
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
@@ -78,6 +80,15 @@ class DetailViewFragment : Fragment() {
             //UserId
             viewholder.detailviewitem_profile_textview.text = contentDTOs!![position].userId
 
+            firestore?.collection("profileImages")?.document(contentDTOs!![position].uid!!)?.addSnapshotListener{
+                    documentSnapshot, firebaseFirestoreException ->
+                if(documentSnapshot == null) return@addSnapshotListener
+                if(documentSnapshot.data != null){
+                    var url = documentSnapshot?.data!!["image"] //이미지 주소값을 받아옴
+                    Glide.with(activity!!).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image!!)
+                }
+            }
+
             //Image(이미지 url을 load하기위해 Glide사용)
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_imageview_content)
 
@@ -86,6 +97,7 @@ class DetailViewFragment : Fragment() {
 
             //likes
             viewholder.detailviewitem_favoritecounter_textview.text ="Likes " + contentDTOs!![position].favoriteCount
+
 
             //ProfileImage
 
